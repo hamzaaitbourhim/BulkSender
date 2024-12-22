@@ -5,9 +5,10 @@
 ![BulkSender_logo_2_2_optimized](https://github.com/user-attachments/assets/e1711ef5-5573-4eed-b232-ed3bd58e2737)
 
 ## Features
-- Select Gmail drafts and sender name.
-- Schedule email sends for a future date and time.
-- Automatically tracks email statuses (Sent/Bounced).
+- **Draft Selection:** Choose any Gmail draft for your bulk email campaign.
+- **Custom Sender Name:** Add a personalized sender name for each email.
+- **Scheduling:** Schedule emails to send at a specific date and time.
+- **Status Tracking:** Automatically updates the Google Sheet with the email status (Sent/Bounced).
 
 ## Installation & Usage
 0. Navigate to Gmail, create the email you want to send and close it as a draft.
