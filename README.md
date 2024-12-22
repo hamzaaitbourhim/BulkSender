@@ -19,7 +19,7 @@
    
 ![files](https://github.com/user-attachments/assets/a6ff48c1-44d9-4e76-b02c-1e67789beca1)
 
-3. Add email addresses to Column A in the Google Sheet staring from cell A2.
+3. Add email addresses to Column A in the Google Sheet starting from cell A2.
 
 ![emails](https://github.com/user-attachments/assets/29bce307-9aa1-4697-bc4c-71adca466a23)
 
