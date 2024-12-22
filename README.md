@@ -12,6 +12,7 @@
 ## Installation
 1. Open Google Sheets.
 2. Navigate to `Extensions > Apps Script` and paste the script files.
+   ![files](https://github.com/user-attachments/assets/a6ff48c1-44d9-4e76-b02c-1e67789beca1)
 3. Test the add-on locally or publish it as a Google Workspace Add-On.
 
 ## Usage
