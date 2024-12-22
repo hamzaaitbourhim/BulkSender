@@ -2,7 +2,7 @@
 
 **BulkSender** is a Google Sheets add-on for sending personalized emails in bulk using Gmail drafts.
 
-![BulkSender_logo](https://github.com/user-attachments/assets/a008e8aa-017e-42b6-8724-d49faed3e9e3)
+![BulkSender_logo_2](https://github.com/user-attachments/assets/4927f172-cba7-4e58-b70d-615660873ae1)
 
 ## Features
 - Select Gmail drafts and sender name.
