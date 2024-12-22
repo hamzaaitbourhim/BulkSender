@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      padding: 0px;
+      width: 420px;
+    }
+
+    .description {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+
+    .form-group input[type="date"],
+    .form-group input[type="time"] {
+      padding: 6px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      width: 250px;
+      height: 15px;
+    }
+
+    .button-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .button-bar button {
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 5px;
+      border-radius: 3px;
+    }
+
+    .button-back {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    .button-back:hover {
+      background-color: #e1e1e1;
+    }
+
+    .button-primary {
+      background-color: #4285f4;
+      color: #fff;
+    }
+
+    .button-primary:hover {
+      background-color: #3367d6;
+    }
+
+    /* Disabled button styles */
+    button:disabled {
+      background-color: #ccc !important;
+      color: #999 !important;
+      cursor: not-allowed !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <p class="description">
+      Emails might be sent up to 30 minutes after the time you have specified.
+    </p>
+    <form method='post'>
+      <div class="form-group">
+        <label for="deliveryDate">Delivery date:</label>
+        <input type="date" id="deliveryDate" required>
+      </div>
+
+      <div class="form-group">
+        <label for="deliveryTime">Delivery time:</label>
+        <input type="time" id="deliveryTime" required>
+      </div>
+      <div class="button-bar">
+        <button
+          type="button"
+          class="button-back"
+          onclick="goBack()"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          class="button-primary"
+          onclick="scheduleMerge()"
+          id="scheduleBtn"
+          disabled
+        >
+          Schedule Send
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    /**
+     * Navigate back to the draft selection dialog.
+     */
+    function goBack() {
+      google.script.run.showDraftSelectionDialog("<?= draftSubject ?>", "<?= senderName ?>");
+      google.script.host.close();
+    }
+
+    /**
+     * Enable or disable the 'Schedule Send' button based on date and time validity.
+     */
+    function toggleScheduleButton() {
+      const dateInput = document.getElementById("deliveryDate").value;
+      const timeInput = document.getElementById("deliveryTime").value;
+
+      // Combine date and time into a single Date object
+      const selectedDateTime = new Date(`${dateInput}T${timeInput}`);
+      const now = new Date();
+
+      // Enable the button only if the selected date-time is in the future
+      document.getElementById("scheduleBtn").disabled = !(
+        dateInput &&
+        timeInput &&
+        selectedDateTime > now
+      );
+    }
+
+    /**
+     * Schedule the email merge with the provided date and time.
+     */
+    function scheduleMerge() {
+      const date = document.getElementById("deliveryDate").value;
+      const time = document.getElementById("deliveryTime").value;
+      google.script.run.scheduleMerge("<?= draftSubject ?>", "<?= senderName ?>", date, time);
+      google.script.host.close();
+    }
+
+    // Attach event listeners to the date and time inputs
+    document.getElementById("deliveryDate").addEventListener("change", toggleScheduleButton);
+    document.getElementById("deliveryTime").addEventListener("change", toggleScheduleButton);
+  </script>
+</body>
+
+</html>
