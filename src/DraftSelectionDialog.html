@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <? /* The 'drafts' array is passed from Apps Script */ ?>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      padding: 0px;
+      width: 400px;
+    }
+
+    .description {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: inline-block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-inline {
+      display: flex;
+      align-items: center;
+    }
+
+    .form-inline label {
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    select {
+      flex: 1;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    .button-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .button-bar button {
+      border: none;
+      padding: 8px 12px;
+      font-size: 14px;
+      margin-left: 5px;
+      border-radius: 3px;
+      cursor: pointer;
+      /* Will be overridden by :disabled if needed */
+    }
+
+    /* Normal button styles */
+    .button-primary {
+      background-color: #4285f4;
+      color: #fff;
+    }
+
+    .button-primary:hover {
+      background-color: #3367d6;
+    }
+
+    .button-schedule {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    .button-schedule:hover {
+      background-color: #e1e1e1;
+    }
+
+    /* Disabled button styles */
+    button:disabled {
+      background-color: #ccc !important;
+      /* override normal styles */
+      color: #999 !important;
+      cursor: not-allowed !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="description">
+      Add the email addresses to the first column (A) of the sheet.
+      After sending, you can track the status of each email in the second column (B).
+    </p>
+    <form id="draftForm" method='post'>
+      <div class="form-group form-inline">
+        <label for="senderName">Sender Name:</label>
+        <input type="text" id="senderName" name="senderName" value="<?= senderName ?>">
+      </div>
+      <div class="form-group form-inline">
+        <label for="draftSelect">Email Template:</label>
+        <select id="draftSelect" name="draftSubject">
+          <option value="---" <?= !draftSubject || draftSubject === "---" ? "selected" : "" ?>>---</option>
+          <? for (var i = 0; i < drafts.length; i++) { ?>
+            <option value="<?= drafts[i] ?>" <?= draftSubject === drafts[i] ? "selected" : "" ?>>
+              <?= drafts[i] ?>
+            </option>
+          <? } ?>
+        </select>
+      </div>
+      <div class="button-bar">
+        <button
+            type="button"
+            class="button-schedule"
+            onclick="scheduleEmails()"
+            id="scheduleBtn"
+            disabled
+          >
+            Schedule
+          </button>
+        <button
+            type="button"
+            class="button-primary"
+            onclick="sendEmails()"
+            id="sendBtn"
+            disabled
+          >
+            Send emails
+          </button>
+      </div>
+    </form>
+  </div>
+  <script>
+    function sendEmails() {
+      var draft = document.getElementById("draftSelect").value;
+      var sender = document.getElementById("senderName").value;
+      google.script.run.withSuccessHandler(() => google.script.host.close())
+        .sendEmailsFromSelectedDraft(draft, sender);
+    }
+    function scheduleEmails() {
+      var draft = document.getElementById("draftSelect").value;
+      var sender = document.getElementById("senderName").value;
+      google.script.run.showScheduleDialog(draft, sender);
+    }
+    function toggleButtons() {
+      var draft = document.getElementById("draftSelect").value;
+      document.getElementById("scheduleBtn").disabled = draft === "---";
+      document.getElementById("sendBtn").disabled = draft === "---";
+    }
+    document.getElementById("draftSelect").addEventListener("change", toggleButtons);
+    toggleButtons();
+  </script>
+</body>
+
+</html>
